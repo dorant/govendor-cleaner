@@ -53,24 +53,14 @@ type govendor struct {
 }
 
 func removeVendor(path string) error {
-	fmt.Println("Remove dependency:", path)
-
 	args := []string{"remove", path}
 	return exec.Command(command, args...).Run()
 }
 
 func fetchVendor(path, version string) error {
-	fmt.Println("Fetching dependency", path, version)
-
 	str := fmt.Sprintf("%s@%s", path, version)
 	args := []string{"fetch", str}
 	return exec.Command(command, args...).Run()
-}
-
-func getRevision(goPath, origPkg, dep string) {
-	path := fmt.Sprintf("%s/%s", goPath, origPkg)
-
-	fmt.Printf("%s\n", path)
 }
 
 // getPkgRevisionFromVendor returns a revision or a version rule
@@ -138,18 +128,20 @@ func main() {
 				dep := pkg.Origin[found:]
 				vendorFile := fmt.Sprintf("%s/src/%svendor.json", gopath, base)
 
-				fmt.Println("")
 				fmt.Println("Get revision for:", dep, "in:", vendorFile)
 				rev, err := getPkgRevisionFromVendor(vendorFile, dep)
 				if err != nil {
-					fmt.Println("Failed!", err)
+					fmt.Println("! Getting revision failed:", err)
 				} else {
 					// Run govendor in a shell
+					fmt.Println("  Remove dependency:", dep)
 					if err := removeVendor(dep); err != nil {
-						fmt.Println(err)
+						fmt.Println("! Failed to govendor remove", dep, err)
 					}
+
+					fmt.Println("  Fetching dependency", dep, rev)
 					if err := fetchVendor(dep, rev); err != nil {
-						fmt.Println(err)
+						fmt.Println("! Failed to govendor fetch", dep, err)
 					}
 				}
 
