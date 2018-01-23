@@ -12,7 +12,19 @@ rehash
 ```
 
 Usage:
-Following command will go through the vendor.json and tries to solve paths pointing to other packages vendor folder.
+Make sure all current dependencies are needed
+```
+govendor list +u
+govendor remove +u
+```
+
+Make sure all current dependencies are vendored in:
+```
+govendor add +e
+```
+Now you might have dependencies in vendor/vendor.json that points to other packages vendor folder.
+
+Following command goes through the vendor.json and tries to solve theses paths to make them point directly to original package:
 
 ```
 cd <pkg>
