@@ -5,14 +5,14 @@ packages vendor folder.
 This tool tries to clean that up by removing and fetching the dependency
 directly using version rules or revision.
 
-Install:
+### Install
 ```
-go install github.com/dorant/govendor-cleaner 
+go install github.com/dorant/govendor-cleaner
 rehash
 ```
 
-Usage:
-Make sure all current dependencies are needed
+### Usage
+First make sure all current dependencies are needed
 ```
 govendor list +u
 govendor remove +u
